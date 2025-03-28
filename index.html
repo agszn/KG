@@ -24,10 +24,11 @@
             let finalGrade = reverseGradeMap[roundedResult2] || "Invalid";
             
             document.getElementById("result").innerHTML = `
-                Step 1 (Total / 2): ${result1.toFixed(2)} <br> 
-                Step 2 (Step 1 / 2): ${result2.toFixed(2)} <br> 
-                Rounded Step 2: ${roundedResult2} <br>
-                Final Grade: ${finalGrade}
+                Total Score = ${total} <br>
+                Step 1 (Total / 2) = ${result1.toFixed(2)} <br> 
+                Step 2 (Step 1 / 2) = ${result2.toFixed(2)} <br> 
+                Rounded Step 2 = ${roundedResult2} <br>
+                Final Grade = ${finalGrade}
             `;
         }
     </script>
