@@ -5,30 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Grade Calculator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-weight: bold;
+            color: #343a40;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .form-range {
+            margin-bottom: 10px;
+        }
+        .result-box {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .btn-success {
+            font-size: 18px;
+        }
+    </style>
     <script>
-        const gradeMap = {"A+": 5, "A": 4, "B+": 3, "B": 2, "C+": 1};
-        const reverseGradeMap = {5: "A+", 4: "A", 3: "B+", 2: "B", 1: "C+"};
-        
+        const gradeMap = {1: "C+", 2: "B", 3: "B+", 4: "A", 5: "A+"};
+
+        function updateSliderValue(sliderId, valueId) {
+            let slider = document.getElementById(sliderId);
+            let valueDisplay = document.getElementById(valueId);
+            valueDisplay.innerText = gradeMap[slider.value];
+        }
+
         function calculateGrade() {
             let inputs = [
-                document.getElementById("input1").value,
-                document.getElementById("input2").value,
-                document.getElementById("input3").value,
-                document.getElementById("input4").value
+                parseInt(document.getElementById("input1").value),
+                parseInt(document.getElementById("input2").value),
+                parseInt(document.getElementById("input3").value),
+                parseInt(document.getElementById("input4").value)
             ];
             
-            let total = inputs.reduce((sum, grade) => sum + gradeMap[grade], 0);
+            let total = inputs.reduce((sum, grade) => sum + grade, 0);
             let result1 = total / 2;
             let result2 = result1 / 2;
             let roundedResult2 = Math.floor(result2);
-            let finalGrade = reverseGradeMap[roundedResult2] || "Invalid";
+            let finalGrade = gradeMap[roundedResult2] || "Invalid";
             
             document.getElementById("result").innerHTML = `
-                Total Score = ${total} <br>
-                Step 1 (Total / 2) = ${result1.toFixed(2)} <br> 
-                Step 2 (Step 1 / 2) = ${result2.toFixed(2)} <br> 
-                Rounded Step 2 = ${roundedResult2} <br>
-                Final Grade = ${finalGrade}
+                <div class="result-box">
+                    <strong>Total Score</strong> = ${total} <br>
+                    Step 1 (Total / 2) = ${result1.toFixed(2)} <br> 
+                    Step 2 (Step 1 / 2) = ${result2.toFixed(2)} <br> 
+                    Rounded Step 2 = ${roundedResult2} <br>
+                    <strong>Final Grade</strong> = ${finalGrade}
+                </div>
             `;
         }
     </script>
@@ -37,46 +75,31 @@
     <h2 class="text-center">Grade Calculator</h2>
     <div class="row justify-content-center">
         <div class="col-md-6">
+            
             <div class="mb-3">
                 <label class="form-label">Input 1</label>
-                <select id="input1" class="form-select">
-                    <option value="A+">A+ (5)</option>
-                    <option value="A">A (4)</option>
-                    <option value="B+">B+ (3)</option>
-                    <option value="B">B (2)</option>
-                    <option value="C+">C+ (1)</option>
-                </select>
+                <input type="range" id="input1" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input1', 'value1')">
+                <span id="value1">A+</span>
             </div>
+            
             <div class="mb-3">
                 <label class="form-label">Input 2</label>
-                <select id="input2" class="form-select">
-                    <option value="A+">A+ (5)</option>
-                    <option value="A">A (4)</option>
-                    <option value="B+">B+ (3)</option>
-                    <option value="B">B (2)</option>
-                    <option value="C+">C+ (1)</option>
-                </select>
+                <input type="range" id="input2" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input2', 'value2')">
+                <span id="value2">A+</span>
             </div>
+            
             <div class="mb-3">
                 <label class="form-label">Input 3</label>
-                <select id="input3" class="form-select">
-                    <option value="A+">A+ (5)</option>
-                    <option value="A">A (4)</option>
-                    <option value="B+">B+ (3)</option>
-                    <option value="B">B (2)</option>
-                    <option value="C+">C+ (1)</option>
-                </select>
+                <input type="range" id="input3" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input3', 'value3')">
+                <span id="value3">A+</span>
             </div>
+            
             <div class="mb-3">
                 <label class="form-label">Input 4</label>
-                <select id="input4" class="form-select">
-                    <option value="A+">A+ (5)</option>
-                    <option value="A">A (4)</option>
-                    <option value="B+">B+ (3)</option>
-                    <option value="B">B (2)</option>
-                    <option value="C+">C+ (1)</option>
-                </select>
+                <input type="range" id="input4" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input4', 'value4')">
+                <span id="value4">A+</span>
             </div>
+            
             <button class="btn btn-success w-100" onclick="calculateGrade()">Submit</button>
             <h3 class="mt-4" id="result"></h3>
         </div>
