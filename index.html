@@ -10,104 +10,108 @@
             background-color: #f8f9fa;
         }
         .container {
+            max-width: 600px;
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        h2 {
-            font-weight: bold;
-            color: #343a40;
+        .btn-group button {
+            transition: 0.3s;
         }
-        .form-label {
-            font-weight: bold;
-        }
-        .form-range {
-            margin-bottom: 10px;
-        }
-        .result-box {
-            background: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-        }
-        .btn-success {
-            font-size: 18px;
+        .btn-group button.active {
+            background-color: #007bff !important;
+            color: black !important;
         }
     </style>
     <script>
-        const gradeMap = {1: "C+", 2: "B", 3: "B+", 4: "A", 5: "A+"};
-
-        function updateSliderValue(sliderId, valueId) {
-            let slider = document.getElementById(sliderId);
-            let valueDisplay = document.getElementById(valueId);
-            valueDisplay.innerText = gradeMap[slider.value];
+        const gradeMap = {"A+": 5, "A": 4, "B+": 3, "B": 2, "C+": 1};
+        const reverseGradeMap = {5: "A+", 4: "A", 3: "B+", 2: "B", 1: "C+"};
+        
+        function setGrade(inputId, grade, element) {
+            document.getElementById(inputId).value = grade;
+            let buttons = document.querySelectorAll(`[data-group='${inputId}']`);
+            buttons.forEach(btn => btn.classList.remove("active"));
+            element.classList.add("active");
         }
-
+        
         function calculateGrade() {
             let inputs = [
-                parseInt(document.getElementById("input1").value),
-                parseInt(document.getElementById("input2").value),
-                parseInt(document.getElementById("input3").value),
-                parseInt(document.getElementById("input4").value)
+                document.getElementById("input1").value,
+                document.getElementById("input2").value,
+                document.getElementById("input3").value,
+                document.getElementById("input4").value
             ];
             
-            let total = inputs.reduce((sum, grade) => sum + grade, 0);
+            let total = inputs.reduce((sum, grade) => sum + parseInt(grade), 0);
             let result1 = total / 2;
             let result2 = result1 / 2;
             let roundedResult2 = Math.floor(result2);
-            let finalGrade = gradeMap[roundedResult2] || "Invalid";
+            let finalGrade = reverseGradeMap[roundedResult2] || "Invalid";
             
             document.getElementById("result").innerHTML = `
-                <div class="result-box">
-                    <strong>Total Score</strong> = ${total} <br>
-                    Step 1 (Total / 2) = ${result1.toFixed(2)} <br> 
-                    Step 2 (Step 1 / 2) = ${result2.toFixed(2)} <br> 
-                    Rounded Step 2 = ${roundedResult2} <br>
-                    <strong>Final Grade</strong> = ${finalGrade}
-                </div>
-            `;
+                <strong>Total Score:</strong> ${total} <br>
+                Step 1 (Total / 2): ${result1.toFixed(2)} <br>
+                Step 2 (Step 1 / 2): ${result2.toFixed(2)} <br>
+                Rounded Step 2: ${roundedResult2} <br>
+                <strong>Final Grade:</strong> ${finalGrade}`;
         }
     </script>
 </head>
-<body class="container mt-5">
-    <h2 class="text-center">Grade Calculator</h2>
-    <div class="text-center mb-4">
-        <a href="button.html" class="btn btn-primary me-2">Button Input</a>
-        <a href="dropdown.html" class="btn btn-secondary">DropDown Input</a>
-        <a href="slider.html" class="btn btn-secondary">Slider Input</a>
-    </div>
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            
-            <div class="mb-3">
-                <label class="form-label">Input 1</label>
-                <input type="range" id="input1" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input1', 'value1')">
-                <span id="value1">A+</span>
+<body class="d-flex justify-content-center align-items-center vh-100">
+    <div class="container">
+        <h2 class="text-center mb-4">Grade Calculator</h2>
+        
+        <div class="mb-3">
+            <label class="form-label">Input 1</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" data-group="input1" onclick="setGrade('input1', '5', this)">A+ (5)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input1" onclick="setGrade('input1', '4', this)">A (4)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input1" onclick="setGrade('input1', '3', this)">B+ (3)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input1" onclick="setGrade('input1', '2', this)">B (2)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input1" onclick="setGrade('input1', '1', this)">C+ (1)</button>
             </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Input 2</label>
-                <input type="range" id="input2" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input2', 'value2')">
-                <span id="value2">A+</span>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Input 3</label>
-                <input type="range" id="input3" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input3', 'value3')">
-                <span id="value3">A+</span>
-            </div>
-            
-            <div class="mb-3">
-                <label class="form-label">Input 4</label>
-                <input type="range" id="input4" class="form-range" min="1" max="5" value="5" oninput="updateSliderValue('input4', 'value4')">
-                <span id="value4">A+</span>
-            </div>
-            
-            <button class="btn btn-success w-100" onclick="calculateGrade()">Submit</button>
-            <h3 class="mt-4" id="result"></h3>
+            <input type="hidden" id="input1" value="5">
         </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Input 2</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" data-group="input2" onclick="setGrade('input2', '5', this)">A+ (5)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input2" onclick="setGrade('input2', '4', this)">A (4)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input2" onclick="setGrade('input2', '3', this)">B+ (3)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input2" onclick="setGrade('input2', '2', this)">B (2)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input2" onclick="setGrade('input2', '1', this)">C+ (1)</button>
+            </div>
+            <input type="hidden" id="input2" value="5">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Input 3</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" data-group="input3" onclick="setGrade('input3', '5', this)">A+ (5)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input3" onclick="setGrade('input3', '4', this)">A (4)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input3" onclick="setGrade('input3', '3', this)">B+ (3)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input3" onclick="setGrade('input3', '2', this)">B (2)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input3" onclick="setGrade('input3', '1', this)">C+ (1)</button>
+            </div>
+            <input type="hidden" id="input3" value="5">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Input 4</label>
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary" data-group="input4" onclick="setGrade('input4', '5', this)">A+ (5)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input4" onclick="setGrade('input4', '4', this)">A (4)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input4" onclick="setGrade('input4', '3', this)">B+ (3)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input4" onclick="setGrade('input4', '2', this)">B (2)</button>
+                <button type="button" class="btn btn-outline-primary" data-group="input4" onclick="setGrade('input4', '1', this)">C+ (1)</button>
+            </div>
+            <input type="hidden" id="input4" value="5">
+        </div>
+        
+        <button class="btn btn-success w-100" onclick="calculateGrade()">Calculate Grade</button>
+        <h3 class="mt-4 text-center" id="result"></h3>
     </div>
 </body>
 </html>
