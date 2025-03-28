@@ -19,10 +19,16 @@
             
             let total = inputs.reduce((sum, grade) => sum + gradeMap[grade], 0);
             let result1 = total / 2;
-            let result2 = Math.floor(result1 / 2);
-            let finalGrade = reverseGradeMap[result2] || "Invalid";
+            let result2 = result1 / 2;
+            let roundedResult2 = Math.floor(result2);
+            let finalGrade = reverseGradeMap[roundedResult2] || "Invalid";
             
-            document.getElementById("result").innerHTML = `Step 1: ${result1} <br> Step 2: ${result2} <br> Final Grade: ${finalGrade}`;
+            document.getElementById("result").innerHTML = `
+                Step 1 (Total / 2): ${result1.toFixed(2)} <br> 
+                Step 2 (Step 1 / 2): ${result2.toFixed(2)} <br> 
+                Rounded Step 2: ${roundedResult2} <br>
+                Final Grade: ${finalGrade}
+            `;
         }
     </script>
 </head>
